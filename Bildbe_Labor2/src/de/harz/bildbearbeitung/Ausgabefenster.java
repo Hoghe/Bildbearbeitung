@@ -28,6 +28,8 @@ public class Ausgabefenster extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField _tfDateiname;
+	private Bild _bild;
+
 
 	/**
 	 * Launch the application.
@@ -99,48 +101,35 @@ public class Ausgabefenster extends JFrame {
 				fC.setAcceptAllFileFilterUsed(false);
 				int rueckgabeWert = fC.showOpenDialog(null);
 				if (rueckgabeWert == JFileChooser.APPROVE_OPTION) {
-//					Platform.runLater(() -> {
-//					contentPane.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-//					});
 					_tfDateiname.setText(fC.getSelectedFile().getPath());
 					File Eingabedatei = fC.getSelectedFile();
-					Bild _b = new Bild(Eingabedatei);
-					_b.berechne();
-					lblGMin.setText("G min:    "+_b.getGmin());
-					lblGMax.setText("G max:    "+_b.getGmax());
-					lblGMittel.setText("G mittel: "+_b.getGmittel());
-					lblGVarianz.setText("Varianz:  "+_b.getVarianz());
-					DecimalFormat format = new DecimalFormat("####0.###");
-					lblEntropie.setText("Entropie: "+format.format(_b.getEntropie()));
-//					contentPane.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+					_bild = new Bild(Eingabedatei);
 				}
 			}
 		});
-//		btAuswaehlen.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				FileFilter filter = new FileNameExtensionFilter("Bilder", 
-//		                "gif", "png", "jpg", "bmp");
-//				JFileChooser fC = new JFileChooser();
-//				fC.addChoosableFileFilter(filter);
-//				fC.setAcceptAllFileFilterUsed(false);
-//				int rueckgabeWert = fC.showOpenDialog(null);
-//				if (rueckgabeWert == JFileChooser.APPROVE_OPTION) {		
-//					_tfDateiname.setText(fC.getSelectedFile().getPath());
-//					File Eingabedatei = fC.getSelectedFile();
-//					Bild _b = new Bild(Eingabedatei);
-//					_b.berechne();
-//					lblGMin.setText("G min:    "+_b.getGmin());
-//					lblGMax.setText("G max:    "+_b.getGmax());
-//					lblGMittel.setText("G mittel: "+_b.getGmittel());
-//					lblGVarianz.setText("Varianz:  "+_b.getVarianz());
-//					DecimalFormat format = new DecimalFormat("####0.###");
-//					lblEntropie.setText("Entropie: "+format.format(_b.getEntropie()));
-//					
-//				}
-//			}
-//		});
+
 		btAuswaehlen.setBounds(325, 15, 80, 20);
 		contentPane.add(btAuswaehlen);
+		
+		Button btBerechnen = new Button("Werte berechnen");
+		btBerechnen.addMouseListener(new MouseAdapter() {
+
+			public void mouseClicked(MouseEvent e) {
+				contentPane.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				_bild.berechne();
+				lblGMin.setText("G min:    "+_bild.getGmin());
+				lblGMax.setText("G max:    "+_bild.getGmax());
+				lblGMittel.setText("G mittel: "+_bild.getGmittel());
+				lblGVarianz.setText("Varianz:  "+_bild.getVarianz());
+				DecimalFormat format = new DecimalFormat("####0.###");
+				lblEntropie.setText("Entropie: "+format.format(_bild.getEntropie()));
+				contentPane.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
+			}
+		});
+
+		btBerechnen.setBounds(15, 125, 140, 20);
+		contentPane.add(btBerechnen);
 		
 		
 		Button btBeenden = new Button("Beenden");
