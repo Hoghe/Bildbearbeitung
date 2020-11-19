@@ -71,15 +71,15 @@ public class Ausgabefenster extends JFrame {
 		
 		
 		JLabel lblGMin = new JLabel("G min:    ");
-		lblGMin.setBounds(15, 50, 80, 20);
+		lblGMin.setBounds(15, 50, 100, 20);
 		contentPane.add(lblGMin);
 		
 		JLabel lblGMax = new JLabel("G max:    ");
-		lblGMax.setBounds(15, 75, 80, 20);
+		lblGMax.setBounds(15, 75, 100, 20);
 		contentPane.add(lblGMax);
 		
 		JLabel lblGMittel = new JLabel("G mittel: ");
-		lblGMittel.setBounds(15, 100, 80, 20);
+		lblGMittel.setBounds(15, 100, 100, 20);
 		contentPane.add(lblGMittel);
 		
 		JLabel lblGVarianz = new JLabel("Varianz:  ");
@@ -117,12 +117,13 @@ public class Ausgabefenster extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				contentPane.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				_bild.berechne();
-				lblGMin.setText("G min:    "+_bild.getGmin());
-				lblGMax.setText("G max:    "+_bild.getGmax());
-				lblGMittel.setText("G mittel: "+_bild.getGmittel());
-				lblGVarianz.setText("Varianz:  "+_bild.getVarianz());
-				DecimalFormat format = new DecimalFormat("####0.###");
-				lblEntropie.setText("Entropie: "+format.format(_bild.getEntropie()));
+				DecimalFormat format_ohne = new DecimalFormat("##0");
+				DecimalFormat format_3 = new DecimalFormat("####0.###");
+				lblGMin.setText("G min:     "+format_ohne.format(_bild.getGmin()));
+				lblGMax.setText("G max:    "+format_ohne.format(_bild.getGmax()));
+				lblGMittel.setText("G mittel: "+format_3.format(_bild.getGmittel()));
+				lblGVarianz.setText("Varianz:  "+format_3.format(_bild.getVarianz()));
+				lblEntropie.setText("Entropie: "+format_3.format(_bild.getEntropie()));
 				contentPane.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
 			}

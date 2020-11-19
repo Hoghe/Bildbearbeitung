@@ -1,5 +1,6 @@
 package de.harz.bildbearbeitung;
 
+import java.awt.Color;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
@@ -13,9 +14,9 @@ public class Bild {
 	private File _datei;
 	private BufferedImage _bi;
 	private BufferedImage _grauBild;
-	private int[] _grauwerte = new int[] {255, 0 , 0};
-	private int _varianz = 0;
-	private double _entropie = 0;
+	private Double[] _grauwerte = new Double[] {255d, 0d , 0d};
+	private Double _varianz = 0d;
+	private Double _entropie = 0.0;
 	
 	public Bild(File datei) {
 		this._datei = datei;
@@ -45,41 +46,38 @@ public class Bild {
 		return grauBild;
 	}
 	
-	private int[] ermittleGrauWerte(BufferedImage graubild) {
-		int[] grauwerte = new int[] {255, 0 , 0};
-		int summeGrauwerte = 0;
-		int zaehlerPixel = 0;
-		int rgbWert;
+	private Double[] ermittleGrauWerte(BufferedImage graubild) {
+		Double[] grauwerte = new Double[] {255d, 0d , 0d};
+		Double summeGrauwerte = 0d;
+		Color rgbWert;
 		int grauwert;
 		for (int i=0; i<graubild.getWidth(); i++) {
 			for (int j=0; j<graubild.getHeight(); j++) {
-				zaehlerPixel++;
-				rgbWert = graubild.getRGB(i, j);
-				grauwert = rgbWert & 0xFF;
+				rgbWert = new Color(graubild.getRGB(i, j));
+				//grauwert = (int)(rgbWert.getRed() * 0.299 + rgbWert.getGreen() * 0.587 + rgbWert.getBlue() * 0.114);
+				grauwert = (rgbWert.getRed() + rgbWert.getGreen() + rgbWert.getBlue() ) / 3;
 				grauwerte[0] = Math.min(grauwerte[0], grauwert);
 				grauwerte[1] = Math.max(grauwerte[1], grauwert);
 				summeGrauwerte += grauwert;
+
 				}
 		}
-		grauwerte[2] = summeGrauwerte/zaehlerPixel;
+		grauwerte[2] = summeGrauwerte/(graubild.getWidth()*graubild.getHeight());
 		return grauwerte;
 	}
 	
-	private int ermittleVarianz(BufferedImage graubild, int mittelereGrauwert) {
-		int summeGrauwertVarianz = 0;
-		int zaehlerPixel = 0;
+	private Double ermittleVarianz(BufferedImage graubild, Double mittelereGrauwert) {
+		Double summeGrauwertVarianz = 0d;
 		int rgbWert;
 		int grauwert;
 		for (int i=0; i<graubild.getWidth(); i++) {
 			for (int j=0; j<graubild.getHeight(); j++) {
-				zaehlerPixel++;
-				System.out.println();
 				rgbWert = graubild.getRGB(i, j);
 				grauwert = rgbWert & 0xFF;
 				summeGrauwertVarianz += Math.pow((grauwert-mittelereGrauwert),2);
 			}
 		}
-		return summeGrauwertVarianz/(zaehlerPixel-1);
+		return summeGrauwertVarianz/((graubild.getWidth()*graubild.getHeight())-1);
 	}
 	
 	private double ermittleEntopie(BufferedImage graubild) {
@@ -107,23 +105,23 @@ public class Bild {
 		return entropie;
 	}
 	
-	public int getGmin() {
+	public Double getGmin() {
 		return _grauwerte[0];
 	}
 	
-	public int getGmax() {
+	public Double getGmax() {
 		return _grauwerte[1];
 	}
 	
-	public int getGmittel() {
+	public Double getGmittel() {
 		return _grauwerte[2];
 	}
 	
-	public int getVarianz() {
+	public Double getVarianz() {
 		return _varianz;
 	}
 	
-	public double getEntropie() {
+	public Double getEntropie() {
 		return _entropie;
 	}
 	
