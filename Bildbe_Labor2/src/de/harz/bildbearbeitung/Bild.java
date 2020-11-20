@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+
 
 public class Bild {
 	
@@ -23,7 +25,7 @@ public class Bild {
 	}
 	
 	public void berechne() {
-		einlesen();
+		//einlesen();
 		_grauBild = erzeugeGrauwertbild(_bi);
 		_grauwerte = ermittleGrauWerte(_grauBild);
 		_varianz = ermittleVarianz(_grauBild, _grauwerte[2]);
@@ -34,10 +36,16 @@ public class Bild {
 	public void einlesen() {
 		try {
 			_bi = ImageIO.read(_datei);
+			//_ausgabebild = new ImageIcon(_bi).getImage();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
+//	public ImageIcon getAusgabebildOri() {
+//		ImageIcon _ausgabebildFenster = new ImageIcon(_bi);
+//		return _ausgabebildFenster;
+//	}
 
 	private BufferedImage erzeugeGrauwertbild(BufferedImage bild) {
 		BufferedImage grauBild = new BufferedImage(bild.getWidth(), bild.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -45,6 +53,19 @@ public class Bild {
 		op.filter(bild, grauBild);
 		return grauBild;
 	}
+	
+	public ImageIcon getAusgabebild(int variante) {
+		if (variante == 1) {
+			ImageIcon _ausgabebildFenster = new ImageIcon(erzeugeGrauwertbild(_bi));
+			return _ausgabebildFenster;
+		} else {
+			ImageIcon _ausgabebildFenster = new ImageIcon(_bi);
+			return _ausgabebildFenster;
+		}
+
+	}
+	
+	
 	
 	private Double[] ermittleGrauWerte(BufferedImage graubild) {
 		Double[] grauwerte = new Double[] {255d, 0d , 0d};
