@@ -52,6 +52,7 @@ public class Bild {
 	
 	private Double[] ermittleGrauWerte() {
 		if (_grauBild == null) erzeugeGrauwertbild(_bi);
+		setTempBild(_grauBild);
 		Double[] grauwerte = new Double[] {255d, 0d , 0d};
 		Double summeGrauwerte = 0d;
 		Color rgbWert;
