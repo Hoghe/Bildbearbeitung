@@ -129,6 +129,7 @@ public class Ausgabefenster extends JFrame {
 		contentPane.add(rdbtnBinarisierung);
 		
 		_tfschwellwert = new JTextField();
+		_tfschwellwert.setToolTipText("Bitte Schwellwert zwischen 0 und 255 eingeben (Default-Wert: 127");
 		_tfschwellwert.setBounds(295, 275, 40, 20);
 		contentPane.add(_tfschwellwert);
 		_tfschwellwert.setColumns(10);
