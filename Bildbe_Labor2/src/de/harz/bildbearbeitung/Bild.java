@@ -173,12 +173,12 @@ public class Bild {
 	}
 	
 	public BufferedImage erzeugeHistgramVerschiebung(BufferedImage bild, int verschiebeKonstante) {
-		BufferedImage HistgramVerschiebungBild = new BufferedImage(_grauBild.getWidth(), _grauBild.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage HistgramVerschiebungBild = new BufferedImage(bild.getWidth(), bild.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		int rgbWert;
 		int grauwert;
-		for (int i=0; i<_grauBild.getWidth(); i++) {
-			for (int j=0; j<_grauBild.getHeight(); j++) {
-				rgbWert = _grauBild.getRGB(i, j);
+		for (int i=0; i<bild.getWidth(); i++) {
+			for (int j=0; j<bild.getHeight(); j++) {
+				rgbWert = bild.getRGB(i, j);
 				grauwert = rgbWert & 0xFF;
 				int neuerGrauwert = grauwert+verschiebeKonstante;
 				if (neuerGrauwert<0)
@@ -190,6 +190,41 @@ public class Bild {
 			}
 		}
 		return HistgramVerschiebungBild;
+	}
+	
+	public BufferedImage berechneRechteckOper(BufferedImage bild, int dimension) {
+		BufferedImage rechteckOperatorBild = new BufferedImage(bild.getWidth(), bild.getHeight(), BufferedImage.TYPE_INT_RGB);
+		BufferedImage maske = new BufferedImage(dimension, dimension, BufferedImage.TYPE_INT_RGB);
+		for (int i = ( dimension/2 ); i < bild.getWidth() - ( dimension/2 ); i++ ) {
+			for (int j = ( dimension/2 ); j < bild.getHeight() - ( dimension/2 ); j++) {
+				int zaehlerWidth = i - ( dimension/2 );
+		        for ( int k = 0; k < maske.getWidth(); k++ ) {
+		            int zaehlerHeight = j - ( dimension/2 ); 
+		            for ( int m = 0; m < maske.getHeight(); m++ ) {
+		              int rgb = bild.getRGB( zaehlerWidth, zaehlerHeight );
+		              maske.setRGB(k, m, rgb);
+		              zaehlerHeight++;
+		            } // for m
+		            zaehlerWidth++;
+		          } // for k
+		        int summe = 0;
+		        for ( int p = 0; p < maske.getWidth(); p++ ) {
+		          for ( int q = 0; q < maske.getHeight(); q++ ) {
+		            int rgb = maske.getRGB(p, q);
+		            Color c = new Color( rgb );
+		            summe += c.getRed(); 
+		          } // for q  
+		        } // for p 
+		        
+		        int newPixel = (int) ( Math.round( summe/( dimension * dimension ) ) );
+		        
+		        // neu berechnetes Pixel in neues BufferedImage schreiben
+		        Color cNeu = new Color( newPixel, newPixel, newPixel );
+		        int argbNeu = cNeu.getRGB();
+		        rechteckOperatorBild.setRGB( i, j, argbNeu );        
+			}
+		}
+		return rechteckOperatorBild;
 	}
 	
 	public int[] berechneBildMassstab() {

@@ -47,7 +47,7 @@ public class Ausgabefenster extends JFrame {
 			public void run() {
 				try {
 					Ausgabefenster frame = new Ausgabefenster();
-					frame.setTitle("Bildverarbeitung Labor2");
+					frame.setTitle("Bildverarbeitung Labor2 Version 1.0.5");
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -61,7 +61,7 @@ public class Ausgabefenster extends JFrame {
 	 */
 	public Ausgabefenster() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 690, 400);
+		setBounds(100, 100, 690, 425);
 		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -156,6 +156,29 @@ public class Ausgabefenster extends JFrame {
 		slider.setMaximum(255);
 		slider.setValue(0);
 		contentPane.add(slider);
+		
+		JRadioButton rdbtnReckeckOp = new JRadioButton("Rechteck-Operator");
+		rdbtnReckeckOp.setBounds(15, 325, 160, 20);
+		bg.add(rdbtnReckeckOp);
+		contentPane.add(rdbtnReckeckOp);
+		
+		ButtonGroup bgReOp = new ButtonGroup();
+		
+		JRadioButton rdbtnReckeckOp3 = new JRadioButton("3x3", true);
+		rdbtnReckeckOp3.setBounds(185, 325, 50, 20);
+		bgReOp.add(rdbtnReckeckOp3);
+		contentPane.add(rdbtnReckeckOp3);
+		
+		JRadioButton rdbtnReckeckOp5 = new JRadioButton("5x5");
+		rdbtnReckeckOp5.setBounds(240, 325, 50, 20);
+		bgReOp.add(rdbtnReckeckOp5);
+		contentPane.add(rdbtnReckeckOp5);
+		
+		JRadioButton rdbtnReckeckOp7 = new JRadioButton("7x7");
+		rdbtnReckeckOp7.setBounds(295, 325, 50, 20);
+		bgReOp.add(rdbtnReckeckOp7);
+		contentPane.add(rdbtnReckeckOp7);
+		
 		
 		Button btAuswaehlen = new Button("Auswählen");
 		btAuswaehlen.addMouseListener(new MouseAdapter() {
@@ -275,13 +298,38 @@ public class Ausgabefenster extends JFrame {
 					lblGVarianz.setText("");
 					lblEntropie.setText("");
 					
+				} else if (rdbtnReckeckOp.isSelected()) {
+					BufferedImage rechteckOperBild;
+					String ausgabeText = " Rechteck-Operator Bild";
+					if(rdbtnReckeckOp3.isSelected()) {
+						rechteckOperBild = _bild.berechneRechteckOper(_bild.getOriBild(), 3);
+						ausgabeText = "3x3"+ausgabeText;
+					} else if(rdbtnReckeckOp5.isSelected()) {
+						rechteckOperBild = _bild.berechneRechteckOper(_bild.getOriBild(), 5);
+						ausgabeText = "5x5"+ausgabeText;
+					} else {
+						rechteckOperBild = _bild.berechneRechteckOper(_bild.getOriBild(), 7);
+						ausgabeText = "7x7"+ausgabeText;
+					}
+					_bild.setTempBild(rechteckOperBild);
+					ImageIcon iI = new ImageIcon(rechteckOperBild);
+					int [] neueBreite_Hoehe = _bild.berechneBildMassstab();
+					iI.setImage(iI.getImage().getScaledInstance(neueBreite_Hoehe[0],neueBreite_Hoehe[1],Image.SCALE_DEFAULT));
+					lblBerechnetesbild.setIcon(iI);
+					lblBildtextBer.setText(ausgabeText);
+					lblGMin.setText("");
+					lblGMax.setText("");
+					lblGMittel.setText("");
+					lblGVarianz.setText("");
+					lblEntropie.setText("");
+					
 				}
 				contentPane.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
 			}
 		});
 
-		btAusfuehren.setBounds(15, 325, 140, 20);
+		btAusfuehren.setBounds(15, 350, 140, 20);
 		contentPane.add(btAusfuehren);
 		
 
@@ -291,7 +339,7 @@ public class Ausgabefenster extends JFrame {
 				System.exit(0);
 			}
 		});
-		btBeenden.setBounds(520, 325, 140, 20);
+		btBeenden.setBounds(520, 350, 140, 20);
 		contentPane.add(btBeenden);
 		
 
